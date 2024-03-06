@@ -16,5 +16,8 @@ target_link_libraries(scamp_interface scamp_args scamp_op)
 add_library(scamp_utils ${CMAKE_CURRENT_SOURCE_DIR}/scamp_utils.cpp)
 target_link_libraries(scamp_utils common profile)
 
+add_library(scamp_api ${CMAKE_CURRENT_SOURCE_DIR}/api.cpp)
+target_link_libraries(scamp_api common profile)
+
 mark_cuda_if_available()
 mark_clang_tidy()
