@@ -64,10 +64,10 @@ bool setup_and_do_SCAMP_(SCAMP::SCAMPArgs* args) {
   return pearson;
 }
 
-void compute_scamp(const double* ts, size_t ts_len, int window_size, float* mp, int* indexes) {
+void compute_mp(const double* ts_1, size_t ts1_len, const double* ts_2, size_t ts2_len, int window_size, float* mp, int* indexes) {
     SCAMP::SCAMPArgs args = GetDefaultSCAMPArgs_();
-    args.timeseries_a = vector<double>(ts, ts + ts_len);
-    args.timeseries_b = vector<double>(ts, ts + ts_len);
+    args.timeseries_a = vector<double>(ts_1, ts_1 + ts1_len);
+    args.timeseries_b = vector<double>(ts_2, ts_2 + ts2_len);
     args.window = window_size;
     args.has_b = false;
     args.computing_rows = true;
@@ -80,5 +80,9 @@ void compute_scamp(const double* ts, size_t ts_len, int window_size, float* mp, 
     SplitProfile1NNINDEX_(args.profile_a.data[0].uint64_value, result_nn,
                         result_index, output_pearson, args.window);
     memcpy(mp, result_nn.data(), result_nn.size() * sizeof(float));
-    memcpy(indexes, result_index.data(), result_index.size() * sizeof(uint64_t));
+    memcpy(indexes, result_index.data(), result_index.size() * sizeof(int));
+}
+
+void compute_selfmp(const double* ts, size_t ts_len, int window_size, float* mp, int* indexes) {
+    compute_mp(ts, ts_len, ts, ts_len, window_size, mp, indexes);
 }
